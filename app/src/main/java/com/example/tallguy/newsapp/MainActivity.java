@@ -25,7 +25,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadNewsData() {
-        new FetchNewsTask();
+        String key = "ff4125520ed9458a9f80836e51a7e2b7";
+        new FetchNewsTask().execute(key);
     }
 
     public class FetchNewsTask extends AsyncTask<String, Void, String> {
@@ -36,8 +37,8 @@ public class MainActivity extends AppCompatActivity {
                 return null;
             }
 
-            String parameters = params[0];
-            URL newsRequestUrl = NetworkUtils.buildUrl(parameters);
+            String key = params[0];
+            URL newsRequestUrl = NetworkUtils.buildUrl(key);
 
             try {
                 String jsonNewsResponse = NetworkUtils
