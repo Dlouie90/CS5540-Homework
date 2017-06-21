@@ -22,8 +22,6 @@ public class MainActivity extends AppCompatActivity {
 
     private ProgressBar progress;
 
-    private final String KEY = "ff4125520ed9458a9f80836e51a7e2b7";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,12 +37,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadNewsData() {
-        new FetchNewsTask().execute(KEY);
+        new FetchNewsTask().execute(KeyContainer.KEY);
     }
 
     private void makeSearchQuery() {
         String query = searchBoxEditText.getText().toString();
-        URL searchUrl = NetworkUtils.buildUrl(KEY);
+        URL searchUrl = NetworkUtils.buildUrl(KeyContainer.KEY);
     }
 
     public class FetchNewsTask extends AsyncTask<String, Void, String> {
