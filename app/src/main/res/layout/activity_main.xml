@@ -10,13 +10,6 @@
     android:paddingTop="16dp"
     tools:context="com.example.tallguy.newsapp.MainActivity">
 
-    <EditText
-        android:id="@+id/search_box"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Enter a query, then click Search"
-        android:textSize="22sp" />
-
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyle"
@@ -24,17 +17,10 @@
         android:layout_height="wrap_content"
         android:visibility="gone"/>
 
-    <ScrollView
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerview_news"
+        android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp">
-
-        <TextView
-            android:id="@+id/news_text_data"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="18sp" />
-
-    </ScrollView>
+        />
 
 </LinearLayout>

@@ -4,21 +4,23 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.net.URL;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    private EditText searchBoxEditText;
+    private RecyclerView newsRecyclerView;
 
-    private TextView newsTextView;
+    private JSONParser jParser;
 
     private ProgressBar progress;
 
@@ -27,25 +29,22 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        searchBoxEditText = (EditText) findViewById(R.id.search_box);
+        newsRecyclerView = (RecyclerView) findViewById(R.id.recyclerview_news);
 
-        newsTextView = (TextView) findViewById(R.id.news_text_data);
+        jParser = new JSONParser();
 
         progress = (ProgressBar) findViewById(R.id.progressBar);
 
-        loadNewsData();
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+
+        newsRecyclerView.setLayoutManager(layoutManager);
+
+        FetchNewsTask task = new FetchNewsTask();
+        task.execute();
+
     }
 
-    private void loadNewsData() {
-        new FetchNewsTask().execute(KeyContainer.KEY);
-    }
-
-    private void makeSearchQuery() {
-        String query = searchBoxEditText.getText().toString();
-        URL searchUrl = NetworkUtils.buildUrl(KeyContainer.KEY);
-    }
-
-    public class FetchNewsTask extends AsyncTask<String, Void, String> {
+    public class FetchNewsTask extends AsyncTask<String, Void, ArrayList<NewsItem>> {
 
         @Override
         protected void onPreExecute() {
@@ -54,29 +53,30 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        protected String doInBackground(String... params) {
-            if (params.length == 0) {
-                return null;
-            }
+        protected ArrayList<NewsItem> doInBackground(String... params) {
+            ArrayList<NewsItem> list = null;
 
-            String key = params[0];
-            URL newsRequestUrl = NetworkUtils.buildUrl(key);
-
+            URL newsRequestUrl = NetworkUtils.buildUrl(KeyContainer.KEY);
+            Log.d("MainActivity", "url: " + newsRequestUrl.toString());
             try {
                 String jsonNewsResponse = NetworkUtils
                         .getResponseFromHttpUrl(newsRequestUrl);
-                return jsonNewsResponse;
+                Log.d("MainActivity", "JSON String: " + jsonNewsResponse);
+                list = jParser.parseJSON(jsonNewsResponse);
             } catch (Exception e) {
                 e.printStackTrace();
-                return null;
             }
+            return list;
         }
 
         @Override
-        protected void onPostExecute(String s) {
-
+        protected void onPostExecute(final ArrayList<NewsItem> data) {
+            super.onPostExecute(data);
             progress.setVisibility(View.GONE);
-            newsTextView.append(s + "\n");
+            if (data != null) {
+                NewsAdapter adapter = new NewsAdapter(data);
+                newsRecyclerView.setAdapter(adapter);
+            }
         }
     }
 
