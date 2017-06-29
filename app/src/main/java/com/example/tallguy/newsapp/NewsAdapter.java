@@ -13,12 +13,18 @@ import java.util.ArrayList;
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsAdapterViewHolder> {
 
     private ArrayList<NewsItem> newsData;
+    ItemClickListener listener;
 
-    public NewsAdapter(ArrayList<NewsItem> list) {
+    public NewsAdapter(ArrayList<NewsItem> list, ItemClickListener listener) {
         this.newsData = list;
+        this.listener = listener;
     }
 
-    public class NewsAdapterViewHolder extends RecyclerView.ViewHolder {
+    public interface ItemClickListener {
+        void onItemClick(int clickedItemIndex);
+    }
+
+    public class NewsAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public TextView author;
         public TextView title;
@@ -35,6 +41,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsAdapterVie
             url = (TextView)view.findViewById(R.id.url);
             urlToImage = (TextView)view.findViewById(R.id.url_to_image);
             publishedAt = (TextView)view.findViewById(R.id.published_at);
+            view.setOnClickListener(this);
         }
 
         public void bind(int pos) {
@@ -45,6 +52,12 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsAdapterVie
             url.setText(item.getUrl());
             urlToImage.setText(item.getUrlToImage());
             publishedAt.setText(item.getPublishedAt());
+        }
+
+        @Override
+        public void onClick(View v) {
+            int pos = getAdapterPosition();
+            listener.onItemClick(pos);
         }
     }
 
@@ -71,5 +84,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsAdapterVie
         }
         return newsData.size();
     }
+
+
 
 }

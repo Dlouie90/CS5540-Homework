@@ -1,6 +1,8 @@
 package com.example.tallguy.newsapp;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,6 +19,8 @@ import java.net.URL;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
+
+    static final String TAG = "mainactivity";
 
     private RecyclerView newsRecyclerView;
 
@@ -57,11 +61,9 @@ public class MainActivity extends AppCompatActivity {
             ArrayList<NewsItem> list = null;
 
             URL newsRequestUrl = NetworkUtils.buildUrl(KeyContainer.KEY);
-            Log.d("MainActivity", "url: " + newsRequestUrl.toString());
             try {
                 String jsonNewsResponse = NetworkUtils
                         .getResponseFromHttpUrl(newsRequestUrl);
-                Log.d("MainActivity", "JSON String: " + jsonNewsResponse);
                 list = jParser.parseJSON(jsonNewsResponse);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -74,7 +76,15 @@ public class MainActivity extends AppCompatActivity {
             super.onPostExecute(data);
             progress.setVisibility(View.GONE);
             if (data != null) {
-                NewsAdapter adapter = new NewsAdapter(data);
+                NewsAdapter adapter = new NewsAdapter(data, new NewsAdapter.ItemClickListener() {
+
+                    @Override
+                    public void onItemClick (int clickedItemIndex) {
+                        String url = data.get(clickedItemIndex).getUrl();
+                        Log.d(TAG, String.format("Url %s", url));
+                        openWebPage(url);
+                    }
+                });
                 newsRecyclerView.setAdapter(adapter);
             }
         }
@@ -95,5 +105,13 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(context, message, Toast.LENGTH_LONG).show();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void openWebPage(String url) {
+        Uri webPage = Uri.parse(url);
+        Intent intent = new Intent(Intent.ACTION_VIEW, webPage);
+        if(intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        }
     }
 }
