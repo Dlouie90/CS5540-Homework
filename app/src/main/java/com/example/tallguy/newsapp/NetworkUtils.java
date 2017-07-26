@@ -22,17 +22,17 @@ public class NetworkUtils {
     final static String SORT_PARAM = "sortBy";
     final static String KEY_PARAM = "apiKey";
 
-    public static URL buildUrl(String key) {
+    public static URL buildUrl() {
         Uri builtUri = Uri.parse(BASE_URL).buildUpon()
                 .appendQueryParameter(SOURCE_PARAM, SOURCE)
                 .appendQueryParameter(SORT_PARAM, SORT)
-                .appendQueryParameter(KEY_PARAM, key)
+                .appendQueryParameter(KEY_PARAM, KeyContainer.KEY)
                 .build();
 
         URL url = null;
         try {
             url = new URL(builtUri.toString());
-        } catch (MalformedURLException e ) {
+        } catch (MalformedURLException e) {
             e.printStackTrace();
         }
         Log.v(TAG, "Built URI " + url);
@@ -46,14 +46,14 @@ public class NetworkUtils {
 
             Scanner scanner = new Scanner(in);
             scanner.useDelimiter("\\A");
-            boolean hasInput = scanner.hasNext();
-            if (hasInput) {
-                return scanner.next();
-            } else {
-                return null;
-            }
+            String result = (scanner.hasNext()) ? scanner.next() : null;
+            return result;
+
+        } catch (IOException e) {
+            e.printStackTrace();
         } finally {
             urlConnection.disconnect();
         }
+        return null;
     }
 }

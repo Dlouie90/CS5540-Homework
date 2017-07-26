@@ -2,8 +2,13 @@ package com.example.tallguy.newsapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.AsyncTaskLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,39 +20,73 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.tallguy.newsapp.data.DBHelper;
+import com.example.tallguy.newsapp.data.DatabaseUtils;
 import com.example.tallguy.newsapp.data.KeyContainer;
 import com.example.tallguy.newsapp.data.NewsItem;
 
 import java.net.URL;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Void> {
 
     static final String TAG = "mainactivity";
 
     private RecyclerView newsRecyclerView;
+    private NewsAdapter adapter;
 
     private JSONParser jParser;
 
     private ProgressBar progress;
 
+    private SQLiteDatabase db;
+    private Cursor cursor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         newsRecyclerView = (RecyclerView) findViewById(R.id.recyclerview_news);
-
         jParser = new JSONParser();
-
         progress = (ProgressBar) findViewById(R.id.progressBar);
-
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-
         newsRecyclerView.setLayoutManager(layoutManager);
 
         FetchNewsTask task = new FetchNewsTask();
         task.execute();
+
+    }
+
+    @Override
+    public Loader<Void> onCreateLoader(int id, Bundle args) {
+        return new AsyncTaskLoader<Void>(this) {
+
+            @Override
+            protected void onStartLoading() {
+                super.onStartLoading();
+                progress.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public Void loadInBackground() {
+                RefreshTasks.refreshArticles(MainActivity.this);
+                return null;
+            }
+        };
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Void> loader, Void data) {
+        progress.setVisibility(View.GONE);
+        db = new DBHelper(MainActivity.this).getReadableDatabase();
+        cursor = DatabaseUtils.getAll(db);
+
+        adapter = new NewsAdapter(cursor, this);
+        newsRecyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Void> loader) {
 
     }
 
@@ -63,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
         protected ArrayList<NewsItem> doInBackground(String... params) {
             ArrayList<NewsItem> list = null;
 
-            URL newsRequestUrl = NetworkUtils.buildUrl(KeyContainer.KEY);
+            URL newsRequestUrl = NetworkUtils.buildUrl();
             try {
                 String jsonNewsResponse = NetworkUtils
                         .getResponseFromHttpUrl(newsRequestUrl);
