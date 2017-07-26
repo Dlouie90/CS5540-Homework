@@ -15,6 +15,9 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.tallguy.newsapp.data.KeyContainer;
+import com.example.tallguy.newsapp.data.NewsItem;
+
 import java.net.URL;
 import java.util.ArrayList;
 

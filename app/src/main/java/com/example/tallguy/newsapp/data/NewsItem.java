@@ -1,4 +1,4 @@
-package com.example.tallguy.newsapp;
+package com.example.tallguy.newsapp.data;
 
 
 public class NewsItem {

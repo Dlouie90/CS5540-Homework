@@ -3,6 +3,8 @@ package com.example.tallguy.newsapp;
 
 import android.util.Log;
 
+import com.example.tallguy.newsapp.data.NewsItem;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
