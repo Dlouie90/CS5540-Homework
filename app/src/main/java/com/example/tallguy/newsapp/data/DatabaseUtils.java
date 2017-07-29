@@ -28,7 +28,7 @@ public class DatabaseUtils {
                 null,
                 null,
                 null,
-                null
+                COLUMN_NAME_PUBLISHED_AT + " DESC"
         );
         return cursor;
     }

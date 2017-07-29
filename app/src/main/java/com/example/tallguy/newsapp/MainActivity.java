@@ -107,7 +107,9 @@ public class MainActivity extends AppCompatActivity
             @Override
             protected void onStartLoading() {
                 super.onStartLoading();
+                Log.d(TAG, "on StartLoading has started");
                 progress.setVisibility(View.VISIBLE);
+
             }
 
             // In the background thread, refresh the news items

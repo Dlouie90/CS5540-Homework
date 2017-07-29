@@ -30,7 +30,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 Contract.TABLE_NEWS.COLUMN_NAME_DESCRIPTION + " TEXT, " +
                 Contract.TABLE_NEWS.COLUMN_NAME_URL + " TEXT, " +
                 Contract.TABLE_NEWS.COLUMN_NAME_URL_TO_IMAGE + " TEXT, " +
-                Contract.TABLE_NEWS.COLUMN_NAME_PUBLISHED_AT + " TEXT " + "); ";
+                Contract.TABLE_NEWS.COLUMN_NAME_PUBLISHED_AT + " DATE " + "); ";
 
         Log.d(TAG, "Create table SQL: " + queryString);
         db.execSQL(queryString);

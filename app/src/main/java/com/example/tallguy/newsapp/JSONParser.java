@@ -31,7 +31,7 @@ public class JSONParser {
             String description = item.getString("description");
             String url = item.getString("url");
             String urlToImage = item.getString("urlToImage");
-            String publishedAt = item.getString("publishedAt");
+            String publishedAt = item.getString("publishedAt").substring(0, 10);
             NewsItem ni = new NewsItem(author, title, description, url, urlToImage, publishedAt);
             list.add(ni);
         }

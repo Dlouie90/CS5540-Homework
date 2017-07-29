@@ -63,6 +63,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsAdapterVie
         public TextView author;
         public TextView title;
         public TextView desc;
+        public TextView publish;
         public ImageView img;
 
         // The constructor which sets the views to the ids.
@@ -71,6 +72,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsAdapterVie
             author = (TextView) view.findViewById(R.id.author);
             title = (TextView) view.findViewById(R.id.news_title);
             desc = (TextView) view.findViewById(R.id.description);
+            publish = (TextView) view.findViewById(R.id.published_at);
             img = (ImageView) view.findViewById(R.id.img);
             view.setOnClickListener(this);
             Log.d(TAG, "NewsAdapterViewHolder has been created");
@@ -85,6 +87,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsAdapterVie
             author.setText(cursor.getString(cursor.getColumnIndex((Contract.TABLE_NEWS.COLUMN_NAME_AUTHOR))));
             title.setText(cursor.getString(cursor.getColumnIndex((Contract.TABLE_NEWS.COLUMN_NAME_TITLE))));
             desc.setText(cursor.getString(cursor.getColumnIndex((Contract.TABLE_NEWS.COLUMN_NAME_DESCRIPTION))));
+            publish.setText(cursor.getString(cursor.getColumnIndex((Contract.TABLE_NEWS.COLUMN_NAME_PUBLISHED_AT))));
             String imgUrl = cursor.getString(cursor.getColumnIndex(Contract.TABLE_NEWS.COLUMN_NAME_URL_TO_IMAGE));
             if (imgUrl != null) {
                 Picasso.with(context)
