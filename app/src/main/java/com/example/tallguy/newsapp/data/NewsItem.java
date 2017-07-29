@@ -1,6 +1,6 @@
 package com.example.tallguy.newsapp.data;
 
-
+// The POJO for my new items. Nothing has changed since homework 2 except the auto-indent.
 public class NewsItem {
 
     private String author;

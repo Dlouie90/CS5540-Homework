@@ -10,9 +10,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-
+/*
+    This is my custom java class for parsing JSON.
+ */
 public class JSONParser {
 
+    /*
+    The method parseJSON takes in a JSON string and creates an arraylist of newsitems and
+    returns it.
+     */
     public static ArrayList<NewsItem> parseJSON(String json) throws JSONException {
         ArrayList<NewsItem> list = new ArrayList<>();
         JSONObject main = new JSONObject(json);

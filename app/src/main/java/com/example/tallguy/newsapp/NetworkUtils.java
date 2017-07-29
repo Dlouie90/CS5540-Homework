@@ -3,6 +3,8 @@ package com.example.tallguy.newsapp;
 import android.net.Uri;
 import android.util.Log;
 
+import com.example.tallguy.newsapp.data.KeyContainer;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -22,6 +24,7 @@ public class NetworkUtils {
     final static String SORT_PARAM = "sortBy";
     final static String KEY_PARAM = "apiKey";
 
+    // buildUrl will build the Newsapi.org url using my api key and return the url
     public static URL buildUrl() {
         Uri builtUri = Uri.parse(BASE_URL).buildUpon()
                 .appendQueryParameter(SOURCE_PARAM, SOURCE)
@@ -39,6 +42,7 @@ public class NetworkUtils {
         return url;
     }
 
+    // This method will start the url connection and get the JSON String line by line and return it
     public static String getResponseFromHttpUrl(URL url) throws IOException {
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         try {

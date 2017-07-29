@@ -3,7 +3,8 @@ package com.example.tallguy.newsapp.data;
 import android.provider.BaseColumns;
 
 /**
- * Created by Guldan on 7/24/2017.
+ * This is the Contract where I implement the BaseColumns and set all my strings for my columns
+ * and my table name.
  */
 
 public class Contract {
